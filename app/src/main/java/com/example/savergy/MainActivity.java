@@ -260,8 +260,8 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void alarmOncClick(View view) {
-      ;0-  Spinner min=findViewById(R.id.min);
-586+    Spinner hour=findViewById(R.id.Hour);
+        Spinner min=findViewById(R.id.min);
+    Spinner hour=findViewById(R.id.Hour);
 
         Toast.makeText(getApplicationContext(), "Alarm set for: "+hour.getSelectedItem().toString()+":"+min.getSelectedItem().toString(),Toast.LENGTH_LONG).show();
         NotificationManager notificationManager =
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    -*
+   
     /*public void onDestroy() {
         stopService(myService);
         super.onDestroy();
