@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/TabLayouts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@android:color/background_light"
+        android:visibility="visible"
+        app:tabIndicatorColor="@color/design_default_color_primary_dark">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@android:drawable/ic_lock_idle_low_battery"
+            android:text="Controls" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            android:text="Alarm" />
+
+    </android.support.design.widget.TabLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TabLayouts"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="129dp"
+        android:layout_marginLeft="129dp"
+        android:layout_marginTop="92dp"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:text="Button"
+        android:onClick="Scan"
+        />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="250dp"
+        android:layout_height="254dp"
+        android:layout_below="@+id/TabLayouts"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginLeft="63dp"
+
+        android:layout_marginTop="167dp"
+        android:thumb="@android:drawable/ic_menu_add" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="277dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/TabLayouts"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="120dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="230dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
+        android:text="Intensity:"
+        android:textSize="20dp" />
+
+    <Spinner
+        android:id="@+id/min"
+        android:layout_width="96dp"
+        android:layout_height="49dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="197dp"
+        android:layout_marginLeft="197dp"
+        android:layout_marginTop="239dp"
+        android:visibility="invisible" />
+
+    <Spinner
+        android:id="@+id/Hour"
+        android:layout_width="121dp"
+        android:layout_height="53dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="237dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/minText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="197dp"
+        android:layout_marginLeft="197dp"
+        android:layout_marginTop="169dp"
+        android:text="Min:"
+        android:textSize="50dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/hourText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/TabLayouts"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="62dp"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="169dp"
+        android:text="Hour:"
+        android:textSize="50dp"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/Alarm"
+        android:layout_width="231dp"
+        android:layout_height="72dp"
+        android:layout_alignTop="@+id/TabLayouts"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="291dp"
+        android:text="Set Alarm"
+        android:visibility="invisible"
+        android:onClick="alarmOncClick"
+        />
+
+</RelativeLayout>
