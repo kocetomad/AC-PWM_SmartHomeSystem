@@ -43,14 +43,16 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter bluetoothAdapter;
 
     private static final int SPEECH_REQUEST_CODE = 0;
-    Intent myService=new Intent(this,ForeGroundService.class);
 
     protected void onCreate(Bundle savedInstanceState) {
+        Intent myService=new Intent(this,ForeGroundService.class);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Spinner min=findViewById(R.id.min);
         final Spinner hour=findViewById(R.id.Hour);
         min.setVisibility(View.INVISIBLE);
+        final Spinner Bdevices=findViewById(R.id.devices);
 
 
 
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
+            Toast.makeText(MainActivity.this, "Device doesn't support Bluetooth", Toast.LENGTH_LONG).show();
+
             // Device doesn't support Bluetooth
         }
         if (!bluetoothAdapter.isEnabled()) {
@@ -70,29 +74,22 @@ public class MainActivity extends AppCompatActivity {
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         if(bondedDevices.size() > 0) {
             Object[] devices = (Object []) bondedDevices.toArray();
-            BluetoothDevice device = (BluetoothDevice) devices[0];//TODODODODODOO
-            ParcelUuid[] uuids = device.getUuids();
-            BluetoothSocket socket = null;
-            try {
-                socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
-            } catch (IOException e) {
-                e.printStackTrace();
+           // BluetoothDevice device = (BluetoothDevice) devices[1];//TODODODODODOO
+           // ParcelUuid[] uuids = device.getUuids();
+           // Log.d("asda",device.getName());
+            String BLDevice[] = new String[devices.length];
+            for(int i=0;i<devices.length;i++)
+            {
+                BluetoothDevice devicee = (BluetoothDevice) devices[i];//TODODODODODOO
+                BLDevice[i]=devicee.getName();
             }
-            try {
-                socket.connect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                outputStream = socket.getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                inStream = socket.getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
+                    android.R.layout.simple_spinner_item, BLDevice);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Bdevices.setAdapter(adapter);
+
+
+
         }
 
         //END of bluetooth handling
@@ -103,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-         tabLayout = (TabLayout) findViewById(R.id.TabLayouts);
+        tabLayout = (TabLayout) findViewById(R.id.TabLayouts);
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -112,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tabLayout.getSelectedTabPosition() == 0){
-                    Toast.makeText(MainActivity.this, "Tab " + "Anchor control", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Tab " + "Alarm tab", Toast.LENGTH_LONG).show();
                     Button button=findViewById(R.id.button);
                     button.setVisibility(View.VISIBLE);
                     TextView text=findViewById(R.id.textView);
@@ -129,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     Button alarm=findViewById(R.id.Alarm);
                     alarm.setVisibility(View.INVISIBLE);
                 }else if(tabLayout.getSelectedTabPosition() == 1){
-                    Toast.makeText(MainActivity.this, "Tab " + "User profile", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Tab " + "Control tab", Toast.LENGTH_LONG).show();
                     Button button=findViewById(R.id.button);
                     button.setVisibility(View.INVISIBLE);
                     TextView text=findViewById(R.id.textView);
@@ -164,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         String Minutes[]= new String[60];
         for(int i=0;i<24;i++)
         {
-         Hours[i]=i+1+"";
+            Hours[i]=i+1+"";
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
                 android.R.layout.simple_spinner_item, Hours);
@@ -211,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 // TODO Auto-generated method stub
 
-               // t1.setTextSize(progress);
+                // t1.setTextSize(progress);
                 try {
                     write(progress);
                 } catch (IOException e) {
@@ -225,10 +222,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        startActivityForResult(intent, SPEECH_REQUEST_CODE);
 
 
 
@@ -261,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void alarmOncClick(View view) {
         Spinner min=findViewById(R.id.min);
-    Spinner hour=findViewById(R.id.Hour);
+        Spinner hour=findViewById(R.id.Hour);
 
         Toast.makeText(getApplicationContext(), "Alarm set for: "+hour.getSelectedItem().toString()+":"+min.getSelectedItem().toString(),Toast.LENGTH_LONG).show();
         NotificationManager notificationManager =
@@ -286,7 +283,60 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-   
+
+
+    public void onConnect(View view){
+        Spinner Bdevices=findViewById(R.id.devices);
+
+        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Object[] devices = (Object []) bondedDevices.toArray();
+        BluetoothDevice device = (BluetoothDevice) devices[Bdevices.getSelectedItemPosition()];//TODODODODODOO
+        ParcelUuid[] uuids = device.getUuids();
+        // Log.d("asda",device.getName());
+        String BLDevice[] = new String[devices.length];
+
+
+        BluetoothSocket socket = null;
+
+        try {
+                socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
+                Button but=findViewById(R.id.Connect);
+                but.setText("Connected");
+            } catch (IOException e) {
+                e.printStackTrace();
+            Button but=findViewById(R.id.Connect);
+
+            but.setText("Failed to connect");
+
+            Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+
+        }
+            try {
+                socket.connect();
+                Button but=findViewById(R.id.Connect);
+                but.setText("Connected");
+            } catch (IOException e) {
+                e.printStackTrace();
+                Button but=findViewById(R.id.Connect);
+
+                but.setText("Failed to connect");
+
+                Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+            }
+            try {
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                inStream = socket.getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+
     /*public void onDestroy() {
         stopService(myService);
         super.onDestroy();

@@ -86,9 +86,5 @@ public class ForeGroundService extends Service {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
 }
