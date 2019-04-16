@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.ParcelUuid;
 import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
@@ -307,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Scan(View view){
+
         try {
             write(1);
         } catch (IOException e) {
@@ -364,61 +367,77 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     public void onConnect(View view){
-        Spinner Bdevices=findViewById(R.id.devices);
-
-        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        Object[] devices = (Object []) bondedDevices.toArray();
-        BluetoothDevice device = (BluetoothDevice) devices[Bdevices.getSelectedItemPosition()];//TODODODODODOO
-        ParcelUuid[] uuids = device.getUuids();
-        // Log.d("asda",device.getName());
-        String BLDevice[] = new String[devices.length];
 
 
-        BluetoothSocket socket = null;
 
-        try {
-                socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
-                Button but=findViewById(R.id.Connect);
-                but.setText("Connected");
-                Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
+        Button btn=findViewById(R.id.Connect);
+        btn.setBackgroundColor(Color.parseColor("#F1C40F"));
+        btn.setText("Connecting...");
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
 
-        } catch (IOException e) {
-                e.printStackTrace();
-            Button but=findViewById(R.id.Connect);
-            but.setBackgroundColor(Color.parseColor("#E74C3C"));
-            but.setText("Failed to connect, try again");
+                Spinner Bdevices=findViewById(R.id.devices);
 
-            Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+                Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
 
-        }
-            try {
-                socket.connect();
-                Button but=findViewById(R.id.Connect);
-                but.setText("Connected");
-                Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
+                bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                Object[] devices = (Object []) bondedDevices.toArray();
+                BluetoothDevice device = (BluetoothDevice) devices[Bdevices.getSelectedItemPosition()];//TODODODODODOO
+                ParcelUuid[] uuids = device.getUuids();
+                // Log.d("asda",device.getName());
+                String BLDevice[] = new String[devices.length];
+                BluetoothSocket socket = null;
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                Button but=findViewById(R.id.Connect);
-                but.setBackgroundColor(Color.parseColor("#E74C3C"));
+                try {
 
-                but.setText("Failed to connect, try again");
+                    socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
+                    Button but=findViewById(R.id.Connect);
+                    but.setText("Connected");
+                    Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
 
-                Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Button but=findViewById(R.id.Connect);
+                    but.setBackgroundColor(Color.parseColor("#E74C3C"));
+                    but.setText("Failed to connect, try again");
+
+                    Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+
+                }
+                try {
+                    Button btn=findViewById(R.id.Connect);
+                    btn.setBackgroundColor(Color.parseColor("#F1C40F"));
+                    btn.setText("Connecting...");
+                    socket.connect();
+                    Button but=findViewById(R.id.Connect);
+                    but.setText("Connected");
+                    Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Button but=findViewById(R.id.Connect);
+                    but.setBackgroundColor(Color.parseColor("#E74C3C"));
+
+                    but.setText("Failed to connect, try again");
+
+                    Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+                }
+                try {
+                    outputStream = socket.getOutputStream();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    inStream = socket.getInputStream();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            try {
-                outputStream = socket.getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                inStream = socket.getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        });
+
     }
 
     /*public void onDestroy() {
