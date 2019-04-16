@@ -1001,11 +1001,14 @@ drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
 drawable ic_bluetooth_connected_black_24dp
+drawable ic_cloud_circle_black_24dp
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_notifications_active_black_24dp
+drawable ic_wb_incandescent_black_24dp
 drawable mtrl_snackbar_background
 drawable mtrl_tabs_default_indicator
 drawable navigation_empty_icon
@@ -1025,11 +1028,13 @@ drawable tooltip_frame_dark
 drawable tooltip_frame_light
 id ALT
 id Alarm
+id Button
 id CTRL
 id Connect
 id FUNCTION
 id Hour
 id META
+id Network
 id SHIFT
 id SYM
 id TabLayouts
@@ -1062,7 +1067,6 @@ id barrier
 id beginning
 id blocking
 id bottom
-id button
 id buttonPanel
 id center
 id center_horizontal
@@ -1090,8 +1094,6 @@ id devices
 id dimensions
 id direct
 id disableHome
-id editText2
-id editText3
 id edit_query
 id end
 id enterAlways
@@ -1149,6 +1151,7 @@ id parallax
 id parent
 id parentPanel
 id parent_matrix
+id password
 id percent
 id pin
 id progress_circular
@@ -1195,11 +1198,13 @@ id spread_inside
 id src_atop
 id src_in
 id src_over
+id ssid
 id standard
 id start
 id stretch
 id submenuarrow
 id submit_area
+id tabItem
 id tabMode
 id tag_transition_group
 id tag_unhandled_key_event_manager
@@ -1210,6 +1215,7 @@ id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
 id textView
+id textView2
 id text_input_password_toggle
 id textinput_counter
 id textinput_error

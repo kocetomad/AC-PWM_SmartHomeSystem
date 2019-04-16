@@ -23,7 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:testOnly="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         <activity android:name="com.example.savergy.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
         <service
             android:name="com.example.savergy.ForeGroundService"
             android:process=":my_service" />
-
+        android:theme="@android:style/Theme.Holo.Light.NoActionBar"
         <provider
             android:name="com.android.tools.ir.server.InstantRunContentProvider"
             android:authorities="com.example.savergy.com.android.tools.ir.server.InstantRunContentProvider"

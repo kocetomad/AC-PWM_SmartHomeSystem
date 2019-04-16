@@ -1,5 +1,6 @@
 package com.example.savergy;
 
+import android.app.ActionBar;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
@@ -7,6 +8,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.ParcelUuid;
 import android.speech.RecognizerIntent;
@@ -17,11 +19,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -46,14 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         Intent myService=new Intent(this,ForeGroundService.class);
-
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Spinner min=findViewById(R.id.min);
         final Spinner hour=findViewById(R.id.Hour);
         min.setVisibility(View.INVISIBLE);
         final Spinner Bdevices=findViewById(R.id.devices);
-
 
 
 
@@ -110,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tabLayout.getSelectedTabPosition() == 0){
                     Toast.makeText(MainActivity.this, "Tab " + "Alarm tab", Toast.LENGTH_LONG).show();
-                    Button button=findViewById(R.id.button);
+                    ImageView button=findViewById(R.id.Button);
                     button.setVisibility(View.VISIBLE);
                     TextView text=findViewById(R.id.textView);
                     text.setVisibility(View.VISIBLE);
@@ -125,9 +129,25 @@ public class MainActivity extends AppCompatActivity {
                     minText.setVisibility(View.INVISIBLE);
                     Button alarm=findViewById(R.id.Alarm);
                     alarm.setVisibility(View.INVISIBLE);
+
+                    Button conn=findViewById(R.id.Connect);
+                    conn.setVisibility(View.VISIBLE);
+                    Spinner devicesL=findViewById(R.id.devices);
+                    devicesL.setVisibility(View.VISIBLE);
+
+                    EditText passwordd=findViewById(R.id.password);
+                    passwordd.setVisibility(View.INVISIBLE);
+                    EditText ssid=findViewById(R.id.ssid);
+                    ssid.setVisibility(View.INVISIBLE);
+
+                    Button conntoNet=findViewById(R.id.Network);
+                    conntoNet.setVisibility(View.INVISIBLE);
+
+
+
                 }else if(tabLayout.getSelectedTabPosition() == 1){
                     Toast.makeText(MainActivity.this, "Tab " + "Control tab", Toast.LENGTH_LONG).show();
-                    Button button=findViewById(R.id.button);
+                    ImageView button=findViewById(R.id.Button);
                     button.setVisibility(View.INVISIBLE);
                     TextView text=findViewById(R.id.textView);
                     text.setVisibility(View.INVISIBLE);
@@ -142,6 +162,53 @@ public class MainActivity extends AppCompatActivity {
                     minText.setVisibility(View.VISIBLE);
                     Button alarm=findViewById(R.id.Alarm);
                     alarm.setVisibility(View.VISIBLE);
+
+                    Button conn=findViewById(R.id.Connect);
+                    conn.setVisibility(View.VISIBLE);
+                    Spinner devicesL=findViewById(R.id.devices);
+                    devicesL.setVisibility(View.VISIBLE);
+
+                    EditText passwordd=findViewById(R.id.password);
+                    passwordd.setVisibility(View.INVISIBLE);
+                    EditText ssid=findViewById(R.id.ssid);
+                    ssid.setVisibility(View.INVISIBLE);
+
+                    Button conntoNet=findViewById(R.id.Network);
+                    conntoNet.setVisibility(View.INVISIBLE);
+
+                }else if(tabLayout.getSelectedTabPosition() == 2) {
+                    Toast.makeText(MainActivity.this, "Sync " + "tab", Toast.LENGTH_LONG).show();
+                    ImageView button=findViewById(R.id.Button);
+                    button.setVisibility(View.INVISIBLE);
+                    TextView text=findViewById(R.id.textView);
+                    text.setVisibility(View.INVISIBLE);
+                    SeekBar seek=findViewById(R.id.seekBar);
+                    seek.setVisibility(View.INVISIBLE);
+                    Spinner min=findViewById(R.id.min);
+                    min.setVisibility(View.INVISIBLE);
+                    hour.setVisibility(View.INVISIBLE);
+                    TextView hourText=findViewById(R.id.hourText);
+                    hourText.setVisibility(View.INVISIBLE);
+                    TextView minText=findViewById(R.id.minText);
+                    minText.setVisibility(View.INVISIBLE);
+                    Button alarm=findViewById(R.id.Alarm);
+                    alarm.setVisibility(View.INVISIBLE);
+                    Button conn=findViewById(R.id.Connect);
+                    conn.setVisibility(View.INVISIBLE);
+                    Spinner devicesL=findViewById(R.id.devices);
+                    devicesL.setVisibility(View.INVISIBLE);
+
+
+
+
+                    EditText passwordd=findViewById(R.id.password);
+                    passwordd.setVisibility(View.VISIBLE);
+                    EditText ssid=findViewById(R.id.ssid);
+                    ssid.setVisibility(View.VISIBLE);
+
+                    Button conntoNet=findViewById(R.id.Network);
+                    conntoNet.setVisibility(View.VISIBLE);
+
                 }
             }
 
@@ -222,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+       Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         startActivityForResult(intent, SPEECH_REQUEST_CODE);
@@ -270,6 +337,18 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_bluetooth_connected_black_24dp)
                 .build();
         notificationManager.notify(1, notification);
+
+       try {
+            long unixTime = System.currentTimeMillis();
+            Log.d("time",unixTime+"");
+            int time=(int)unixTime;
+            write(time);
+            // write(1110000+(Integer) hour.getSelectedItem()*100+(Integer)min.getSelectedItem());///111-PREAMBLE(HOUR DATA TYPE) ,next two numbers represent the hour,last two represent minutes
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
@@ -304,11 +383,13 @@ public class MainActivity extends AppCompatActivity {
                 socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
                 Button but=findViewById(R.id.Connect);
                 but.setText("Connected");
-            } catch (IOException e) {
+                Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
+
+        } catch (IOException e) {
                 e.printStackTrace();
             Button but=findViewById(R.id.Connect);
-
-            but.setText("Failed to connect");
+            but.setBackgroundColor(Color.parseColor("#E74C3C"));
+            but.setText("Failed to connect, try again");
 
             Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
 
@@ -317,11 +398,14 @@ public class MainActivity extends AppCompatActivity {
                 socket.connect();
                 Button but=findViewById(R.id.Connect);
                 but.setText("Connected");
+                Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 Button but=findViewById(R.id.Connect);
+                but.setBackgroundColor(Color.parseColor("#E74C3C"));
 
-                but.setText("Failed to connect");
+                but.setText("Failed to connect, try again");
 
                 Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
             }
