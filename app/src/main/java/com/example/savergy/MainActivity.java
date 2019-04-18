@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +41,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private OutputStream outputStream;
     private InputStream inStream;
     private BluetoothAdapter bluetoothAdapter;
+    private int INTENSITY=100;
 
     private static final int SPEECH_REQUEST_CODE = 0;
 
@@ -60,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         final Spinner hour=findViewById(R.id.Hour);
         min.setVisibility(View.INVISIBLE);
         final Spinner Bdevices=findViewById(R.id.devices);
-
 
 
 
@@ -105,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         tabLayout = (TabLayout) findViewById(R.id.TabLayouts);
 
 
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tabLayout.getSelectedTabPosition() == 0){
-                    Toast.makeText(MainActivity.this, "Tab " + "Alarm tab", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Alarm tab", Toast.LENGTH_LONG).show();
                     ImageView button=findViewById(R.id.Button);
                     button.setVisibility(View.VISIBLE);
                     TextView text=findViewById(R.id.textView);
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }else if(tabLayout.getSelectedTabPosition() == 1){
-                    Toast.makeText(MainActivity.this, "Tab " + "Control tab", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Control tab", Toast.LENGTH_LONG).show();
                     ImageView button=findViewById(R.id.Button);
                     button.setVisibility(View.INVISIBLE);
                     TextView text=findViewById(R.id.textView);
@@ -196,9 +199,9 @@ public class MainActivity extends AppCompatActivity {
                     Button alarm=findViewById(R.id.Alarm);
                     alarm.setVisibility(View.INVISIBLE);
                     Button conn=findViewById(R.id.Connect);
-                    conn.setVisibility(View.INVISIBLE);
+                    conn.setVisibility(View.VISIBLE);
                     Spinner devicesL=findViewById(R.id.devices);
-                    devicesL.setVisibility(View.INVISIBLE);
+                    devicesL.setVisibility(View.VISIBLE);
 
 
 
@@ -285,7 +288,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 TextView intensity=findViewById(R.id.textView);
                 intensity.setText("Intensity:"+progress);
-                Toast.makeText(getApplicationContext(), String.valueOf(progress),Toast.LENGTH_LONG).show();
+                ImageView button=findViewById(R.id.Button);
+                button.setColorFilter(Color.parseColor("#1ABC9C"));
+                if(progress==0){
+                    button.setColorFilter(Color.parseColor("#757575"));
+                }
+               // Toast.makeText(getApplicationContext(), String.valueOf(progress),Toast.LENGTH_LONG).show();
 
             }
         });
@@ -318,9 +326,15 @@ public class MainActivity extends AppCompatActivity {
         SeekBar bar=findViewById(R.id.seekBar);
 
         if(bar.getProgress()==0) {
-            bar.setProgress(100);
+            bar.setProgress(INTENSITY);
+            ImageView button=findViewById(R.id.Button);
+            button.setColorFilter(Color.parseColor("#1ABC9C"));
         }else{
+            INTENSITY=bar.getProgress();
             bar.setProgress(0);
+            ImageView button=findViewById(R.id.Button);
+            button.setColorFilter(Color.parseColor("#757575"));
+
         }
 
     }
@@ -342,11 +356,11 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(1, notification);
 
        try {
-            long unixTime = System.currentTimeMillis();
-            Log.d("time",unixTime+"");
-            int time=(int)unixTime;
-            write(time);
-            // write(1110000+(Integer) hour.getSelectedItem()*100+(Integer)min.getSelectedItem());///111-PREAMBLE(HOUR DATA TYPE) ,next two numbers represent the hour,last two represent minutes
+            //Log.d("time",currentTime+"");
+           int time = (int) (new Date().getTime()/1000);
+           Log.d("time",time+"");
+
+           write(1);///111-PREAMBLE(HOUR DATA TYPE) ,next two numbers represent the hour,last two represent minutes
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -370,14 +384,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void onConnect(View view){
 
-
-
         Button btn=findViewById(R.id.Connect);
         btn.setBackgroundColor(Color.parseColor("#F1C40F"));
         btn.setText("Connecting...");
+        Button conn1=findViewById(R.id.Connect1);
+        conn1.setBackgroundColor(Color.parseColor("#F1C40F"));
+        conn1.setText("Connecting...");
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+
 
                 Spinner Bdevices=findViewById(R.id.devices);
 
@@ -396,7 +413,14 @@ public class MainActivity extends AppCompatActivity {
                     socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
                     Button but=findViewById(R.id.Connect);
                     but.setText("Connected");
+                    but.setBackgroundColor(Color.parseColor("#FF1ABC9C"));
+                    Button conn1=findViewById(R.id.Connect1);
+                    conn1.setVisibility(View.GONE);
                     Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
+                    ImageView button=findViewById(R.id.Button);
+                    button.setColorFilter(Color.parseColor("#757575"));
+                    ProgressBar barr=findViewById(R.id.seekBar);
+                    barr.setProgress(0);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -405,16 +429,25 @@ public class MainActivity extends AppCompatActivity {
                     but.setText("Failed to connect, try again");
 
                     Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+
+                    ImageView button=findViewById(R.id.Button);
+                    button.setColorFilter(Color.parseColor("#757575"));
 
                 }
                 try {
-                    Button btn=findViewById(R.id.Connect);
-                    btn.setBackgroundColor(Color.parseColor("#F1C40F"));
-                    btn.setText("Connecting...");
+
                     socket.connect();
                     Button but=findViewById(R.id.Connect);
                     but.setText("Connected");
+                    Button conn1=findViewById(R.id.Connect1);
+                    conn1.setVisibility(View.GONE);
+                    but.setBackgroundColor(Color.parseColor("#FF1ABC9C"));
                     Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG).show();
+                    ImageView button=findViewById(R.id.Button);
+                    button.setColorFilter(Color.parseColor("#757575"));
+                    ProgressBar barr=findViewById(R.id.seekBar);
+                    barr.setProgress(0);
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -424,6 +457,8 @@ public class MainActivity extends AppCompatActivity {
                     but.setText("Failed to connect, try again");
 
                     Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_LONG).show();
+                    ImageView button=findViewById(R.id.Button);
+                    button.setColorFilter(Color.parseColor("#757575"));
                 }
                 try {
                     outputStream = socket.getOutputStream();

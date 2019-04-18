@@ -1,4 +1,4 @@
-#Tue Apr 16 16:28:49 EEST 2019
+#Fri Apr 19 01:44:49 EEST 2019
 base.0=/home/user/Development/Savergy/app/build/intermediates/transforms/dexMerger/debug/9
 path.0=classes.dex
 renamed.0=classes.dex

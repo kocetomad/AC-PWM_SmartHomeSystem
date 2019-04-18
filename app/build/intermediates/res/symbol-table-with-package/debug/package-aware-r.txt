@@ -1004,6 +1004,7 @@ drawable ic_bluetooth_connected_black_24dp
 drawable ic_cloud_circle_black_24dp
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ic_mobile
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
@@ -1031,6 +1032,7 @@ id Alarm
 id Button
 id CTRL
 id Connect
+id Connect1
 id FUNCTION
 id Hour
 id META
